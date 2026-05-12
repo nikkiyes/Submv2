@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>Pareeksha Gurukul</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --or: #F97316; --or2: #EA580C; --or-lt: #FFF4ED;
+  --nv: #1A2744; --nv2: #243156;
+  --gd: #F59E0B;
+  --tx: #1E293B; --mt: #64748B; --bd: #E2E8F0;
+  --wh: #FFFFFF; --bg: #F1F5F9;
+  --rd: 16px; --sh: 0 2px 16px rgba(249,115,22,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:'Noto Sans',sans-serif;background:var(--bg);color:var(--tx)}
+
+/* ── HEADER ── */
+.hdr{background:linear-gradient(140deg,var(--nv) 0%,var(--nv2) 100%);padding:20px 18px 24px;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(249,115,22,.1)}
+.hdr::after{content:'';position:absolute;bottom:-40px;left:40px;width:120px;height:120px;border-radius:50%;background:rgba(245,158,11,.07)}
+.brand{display:flex;align-items:center;gap:13px;margin-bottom:16px;position:relative;z-index:1}
+.logo{width:50px;height:50px;background:linear-gradient(135deg,var(--or),var(--gd));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 16px rgba(249,115,22,.4);flex-shrink:0}
+.brand-t h1{font-family:'Baloo 2',cursive;font-weight:800;font-size:19px;color:#fff;line-height:1.1}
+.brand-t p{font-size:11px;color:rgba(255,255,255,.55);font-weight:500;letter-spacing:.6px;margin-top:2px}
+.qcard{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:14px;padding:14px 16px;position:relative;z-index:1}
+.qlbl{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:1.8px;color:var(--gd);text-transform:uppercase;margin-bottom:8px}
+.qlbl::before{content:'';width:18px;height:2px;background:var(--gd);border-radius:2px}
+.qtxt{font-family:'Baloo 2',cursive;font-size:14px;font-weight:600;color:#fff;line-height:1.5}
+.qempty{font-style:italic;color:rgba(255,255,255,.35);font-size:13px}
+
+/* ── BODY ── */
+.body{padding:22px 16px 0}
+.slbl{font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--mt);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.slbl::after{content:'';flex:1;height:1px;background:var(--bd)}
+
+/* tabs */
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.tab{background:var(--wh);border:2px solid var(--bd);border-radius:var(--rd);padding:14px 6px;text-align:center;cursor:pointer;transition:all .18s}
+.tab:active{transform:scale(.95)}
+.tab.on{border-color:var(--or);background:var(--or-lt)}
+.tab-ic{font-size:24px;margin-bottom:5px;display:block}
+.tab-nm{font-family:'Baloo 2',cursive;font-size:12px;font-weight:700;color:var(--mt)}
+.tab.on .tab-nm{color:var(--or)}
+
+/* text */
+#p-text{display:block}
+#p-audio,#p-video{display:none}
+textarea{width:100%;min-height:170px;border:2px solid var(--or);border-radius:var(--rd);padding:14px;font-family:'Noto Sans',sans-serif;font-size:15px;color:var(--tx);resize:vertical;outline:none;background:var(--wh);line-height:1.6;transition:border-color .2s}
+textarea::placeholder{color:#CBD5E1}
+textarea:focus{border-color:var(--nv)}
+.cc{text-align:right;font-size:12px;color:var(--mt);margin-top:5px}
+.cc.w{color:var(--or)}
+
+/* upload */
+.upz{border:2px dashed var(--or);border-radius:var(--rd);background:var(--or-lt);padding:28px 14px;text-align:center;cursor:pointer;position:relative;transition:background .18s}
+.upz:hover{background:#FFE8D6}
+.upz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upz-ic{font-size:32px;margin-bottom:8px;display:block}
+.upz-t{font-family:'Baloo 2',cursive;font-weight:700;font-size:14px;color:var(--or);margin-bottom:3px}
+.upz-h{font-size:11px;color:var(--mt)}
+.prev{display:none;background:var(--wh);border:2px solid #D1FAE5;border-radius:var(--rd);padding:13px 15px;margin-top:10px;align-items:center;gap:11px}
+.prev.show{display:flex}
+.prev-ic{font-size:26px;flex-shrink:0}
+.prev-info{flex:1;overflow:hidden}
+.prev-nm{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prev-sz{font-size:11px;color:var(--mt);margin-top:2px}
+.prev-rm{background:none;border:none;font-size:18px;cursor:pointer;color:var(--mt);padding:4px;flex-shrink:0}
+
+/* note */
+.note{background:var(--or-lt);border-left:4px solid var(--or);border-radius:0 var(--rd) var(--rd) 0;padding:13px 15px;margin-top:22px;font-size:13px;color:#7C3A1E;line-height:1.6}
+.note strong{color:var(--or)}
+
+/* submit */
+.sbtn{width:100%;margin-top:20px;padding:17px;background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:none;border-radius:var(--rd);font-family:'Baloo 2',cursive;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(249,115,22,.38);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:.3px}
+.sbtn:active{transform:scale(.98)}
+.sbtn:disabled{background:#CBD5E1;box-shadow:none;cursor:not-allowed;transform:none}
+.spin{width:18px;height:18px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:none}
+.sbtn.ld .spin{display:block}
+.sbtn.ld .blt{display:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* success */
+.suc{display:none;text-align:center;padding:60px 24px 40px;animation:fu .5s ease forwards}
+.suc.show{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.suc-ic{font-size:70px;margin-bottom:18px}
+.suc-t{font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;color:var(--nv);margin-bottom:10px}
+.suc-s{font-size:14px;color:var(--mt);line-height:1.6;max-width:270px;margin:0 auto}
+
+/* already submitted */
+.dup{background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--rd);padding:16px;margin-top:16px;text-align:center;display:none}
+.dup.show{display:block}
+.dup p{font-size:14px;color:#B91C1C}
+
+/* toast */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:#1E293B;color:#fff;padding:11px 20px;border-radius:100px;font-size:13px;font-weight:600;transition:transform .3s;z-index:999;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="brand">
+    <div class="logo">🎓</div>
+    <div class="brand-t">
+      <h1>Pareeksha Gurukul</h1>
+      <p>MOCK INTERVIEW PLATFORM</p>
+    </div>
+  </div>
+  <div class="qcard">
+    <div class="qlbl">Today's Question</div>
+    <div class="qtxt" id="qtxt"><span class="qempty">Loading…</span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="body">
+
+    <div class="slbl">Choose Answer Type</div>
+    <div class="tabs">
+      <div class="tab on" data-t="text"  onclick="sw('text')"><span class="tab-ic">✍️</span><span class="tab-nm">Text</span></div>
+      <div class="tab"    data-t="audio" onclick="sw('audio')"><span class="tab-ic">🎙️</span><span class="tab-nm">Audio</span></div>
+      <div class="tab"    data-t="video" onclick="sw('video')"><span class="tab-ic">🎬</span><span class="tab-nm">Video</span></div>
+    </div>
+
+    <!-- TEXT -->
+    <div id="p-text">
+      <div class="slbl">Write Your Answer</div>
+      <textarea id="ta" placeholder="Write your answer here… (Hindi or English)" maxlength="2000" oninput="cc()"></textarea>
+      <div class="char-count cc" id="cc">0 / 2000</div>
+    </div>
+
+    <!-- AUDIO -->
+    <div id="p-audio">
+      <div class="slbl">Upload Audio</div>
+      <div class="upz"><input type="file" id="af" accept="audio/*" onchange="fs('audio')"/>
+        <span class="upz-ic">🎵</span>
+        <div class="upz-t">Tap to choose audio</div>
+        <div class="upz-h">MP3 · M4A · OGG · WAV &nbsp;|&nbsp; Max 20 MB</div>
+      </div>
+      <div class="prev" id="ap">
+        <span class="prev-ic">🎵</span>
+        <div class="prev-info"><div class="prev-nm" id="an">—</div><div class="prev-sz" id="as">—</div></div>
+        <button class="prev-rm" onclick="rf('audio')">✕</button>
+      </div>
+    </div>
+
+    <!-- VIDEO -->
+    <div id="p-video">
+      <div class="slbl">Upload Video</div>
+      <div class="upz"><input type="file" id="vf" accept="video/*" onchange="fs('video')"/>
+        <span class="upz-ic">🎥</span>
+        <div class="upz-t">Tap to choose video</div>
+        <div class="upz-h">MP4 · MOV · WebM &nbsp;|&nbsp; Max 50 MB</div>
+      </div>
+      <div class="prev" id="vp">
+        <span class="prev-ic">🎬</span>
+        <div class="prev-info"><div class="prev-nm" id="vn">—</div><div class="prev-sz" id="vs">—</div></div>
+        <button class="prev-rm" onclick="rf('video')">✕</button>
+      </div>
+    </div>
+
+    <div class="note"><strong>Note:</strong> Each student can submit only once. After submitting, your score will be sent to your Telegram DM. 🙏</div>
+    <button class="sbtn" id="sb" onclick="submit()"><div class="spin"></div><span class="blt">🚀 Submit Answer</span></button>
+    <div style="height:32px"></div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="suc" id="suc">
+  <div class="suc-ic">🎉</div>
+  <div class="suc-t">Submitted!</div>
+  <div class="suc-s">Your answer has been sent for evaluation.<br/>You'll receive your ⭐ rating on Telegram DM.</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG: SERVER_URL is the Railway backend URL ────────────────────────────
+// It's the same origin as this page (Flask serves both), so we use relative URLs
+const SERVER = "";   // empty = same origin
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+const tg = window.Telegram?.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+
+const user  = tg?.initDataUnsafe?.user;
+const params = new URLSearchParams(location.search);
+const UID   = user?.id   || params.get("uid")  || "dev_" + Date.now();
+const UNAME = user?.first_name
+              ? user.first_name + (user.last_name ? " " + user.last_name : "")
+              : (params.get("name") || "Student");
+
+let curType = "text";
+let files   = { audio: null, video: null };
+let activeQ = "";
+
+// ── LOAD QUESTION ─────────────────────────────────────────────────────────────
+async function loadQ() {
+  try {
+    const r = await fetch(SERVER + "/question");
+    const d = await r.json();
+    const el = document.getElementById("qtxt");
+    if (d.active && d.question) {
+      activeQ = d.question;
+      el.textContent = d.question;
+    } else {
+      el.innerHTML = '<span class="qempty">No active question at the moment.</span>';
+      document.getElementById("sb").disabled = true;
+    }
+  } catch(e) {
+    document.getElementById("qtxt").innerHTML = '<span class="qempty">Could not load question.</span>';
+  }
+}
+
+// ── SWITCH TAB ────────────────────────────────────────────────────────────────
+function sw(t) {
+  curType = t;
+  document.querySelectorAll(".tab").forEach(el => el.classList.toggle("on", el.dataset.t === t));
+  document.getElementById("p-text").style.display  = t === "text"  ? "block" : "none";
+  document.getElementById("p-audio").style.display = t === "audio" ? "block" : "none";
+  document.getElementById("p-video").style.display = t === "video" ? "block" : "none";
+}
+
+// ── CHAR COUNT ────────────────────────────────────────────────────────────────
+function cc() {
+  const n = document.getElementById("ta").value.length;
+  const el = document.getElementById("cc");
+  el.textContent = n + " / 2000";
+  el.classList.toggle("w", n > 1800);
+}
+
+// ── FILE SELECT ───────────────────────────────────────────────────────────────
+function fs(type) {
+  const inp  = document.getElementById(type === "audio" ? "af" : "vf");
+  const file = inp.files[0];
+  if (!file) return;
+  const max = type === "video" ? 50 : 20;
+  if (file.size > max * 1024 * 1024) { toast("⚠️ File too large. Max " + max + "MB"); inp.value=""; return; }
+  files[type] = file;
+  const pfx = type === "audio" ? "a" : "v";
+  document.getElementById(pfx + "n").textContent = file.name;
+  document.getElementById(pfx + "s").textContent = fmt(file.size);
+  document.getElementById(pfx + "p").classList.add("show");
+  inp.closest(".upz").style.display = "none";
+}
+
+function rf(type) {
+  files[type] = null;
+  const pfx = type === "audio" ? "a" : "v";
+  const inp  = document.getElementById(type === "audio" ? "af" : "vf");
+  inp.value = "";
+  document.getElementById(pfx + "p").classList.remove("show");
+  inp.closest(".upz").style.display = "block";
+}
+
+function fmt(b) {
+  if (b < 1024) return b + " B";
+  if (b < 1048576) return (b/1024).toFixed(1) + " KB";
+  return (b/1048576).toFixed(1) + " MB";
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────────────────────
+async function submit() {
+  const btn = document.getElementById("sb");
+
+  if (curType === "text") {
+    const t = document.getElementById("ta").value.trim();
+    if (!t) { toast("✏️ Please write your answer"); return; }
+  } else {
+    if (!files[curType]) { toast("📎 Please select a " + curType + " file"); return; }
+  }
+  if (!activeQ) { toast("⚠️ No active question"); return; }
+
+  btn.disabled = true;
+  btn.classList.add("ld");
+
+  try {
+    const fd = new FormData();
+    fd.append("student_id",   UID);
+    fd.append("student_name", UNAME);
+    fd.append("question",     activeQ);
+    fd.append("answer_type",  curType);
+    if (curType === "text") {
+      fd.append("text_answer", document.getElementById("ta").value.trim());
+    } else {
+      fd.append("file", files[curType]);
+    }
+
+    const r = await fetch(SERVER + "/submit", { method: "POST", body: fd });
+    const d = await r.json();
+
+    if (d.ok) {
+      document.getElementById("main").style.display = "none";
+      document.getElementById("suc").classList.add("show");
+      if (tg) setTimeout(() => tg.close(), 3500);
+    } else if (d.error === "Already submitted") {
+      toast("⚠️ You have already submitted today!");
+      btn.disabled = false;
+      btn.classList.remove("ld");
+    } else {
+      throw new Error(d.error || "Failed");
+    }
+  } catch(e) {
+    toast("❌ Submission failed. Try again.");
+    btn.disabled = false;
+    btn.classList.remove("ld");
+  }
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg, ms=3000) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), ms);
+}
+
+loadQ();
+</script>
+</body>
+</html>
